@@ -123,7 +123,7 @@ func (w *webhookAuth) Authenticate(req *http.Request) (user.Info, bool, error) {
 	}
 
 	if token == "" {
-		cookie, err := req.Cookie("R_SESS")
+		cookie, err := req.Cookie("A_SESS")
 		if err != nil && err != http.ErrNoCookie {
 			return nil, false, err
 		} else if err != http.ErrNoCookie && len(cookie.Value) > 0 {
