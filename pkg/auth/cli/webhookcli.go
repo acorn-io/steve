@@ -1,9 +1,11 @@
 package cli
 
 import (
-	"k8s.io/client-go/tools/clientcmd"
 	"os"
 	"time"
+
+	"github.com/rancher/wrangler/pkg/ratelimit"
+	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/rancher/steve/pkg/auth"
 	"github.com/urfave/cli"
@@ -44,6 +46,7 @@ func (w *WebhookConfig) WebhookMiddleware() (auth.Middleware, error) {
 		return nil, err
 	}
 
+	kubeConfig.RateLimiter = ratelimit.None
 	return auth.NewWebhookMiddleware(time.Duration(w.CacheTTLSeconds)*time.Second, kubeConfig)
 }
 
