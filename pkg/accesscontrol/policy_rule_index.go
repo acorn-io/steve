@@ -77,6 +77,7 @@ var null = []byte{'\x00'}
 func (p *policyRuleIndex) addRolesToHash(digest hash.Hash, subjectName string) {
 	for _, crb := range p.getClusterRoleBindings(subjectName) {
 		digest.Write([]byte(crb.RoleRef.Name))
+		digest.Write(null)
 		digest.Write([]byte(p.revisions.roleRevision("", crb.RoleRef.Name)))
 		digest.Write(null)
 	}
@@ -85,11 +86,16 @@ func (p *policyRuleIndex) addRolesToHash(digest hash.Hash, subjectName string) {
 		switch rb.RoleRef.Kind {
 		case "Role":
 			digest.Write([]byte(rb.RoleRef.Name))
+			digest.Write(null)
 			digest.Write([]byte(rb.Namespace))
+			digest.Write(null)
 			digest.Write([]byte(p.revisions.roleRevision(rb.Namespace, rb.RoleRef.Name)))
 			digest.Write(null)
 		case "ClusterRole":
 			digest.Write([]byte(rb.RoleRef.Name))
+			digest.Write(null)
+			digest.Write([]byte(rb.Namespace))
+			digest.Write(null)
 			digest.Write([]byte(p.revisions.roleRevision("", rb.RoleRef.Name)))
 			digest.Write(null)
 		}
